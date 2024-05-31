@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./style/style.css" />
+    <!-- font roboto -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- from login -->
+    <div class="login">
+      <div class="login__container">
+        <h1>Đăng Nhập</h1>
+        <form id="MainForm">
+          <h5>Email</h5>
+          <input type="text" class="input-login-username" id="emailInp"/>
+          <h5>Password</h5>
+          <input type="password" class="input-login-password" id="passwordInp" />
+          <button type="submit" class="login__signInButton">Đăng Nhập</button>
+        </form>
+        <a href="/signup.html" class="login__registerButton"
+          >Tạo tài khoản mới</a
+        >
+      </div>
+      <!-- Thêm thông báo -->
+      <div  class="message success" id="successMessage" >
+        Đăng nhập thành công!
+      </div>
+      <div class="message error" id="errorMessage" >
+        Sai tên tài khoản hoặc mật khẩu
+      </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import { getDatabase ,get, ref, child } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+      import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBo2SIk7ChnSsqTGd5iwawEfDwTz6cVytg",
+        authDomain: "kltn-5595d.firebaseapp.com",
+        databaseURL: "https://kltn-5595d-default-rtdb.firebaseio.com",
+        projectId: "kltn-5595d",
+        storageBucket: "kltn-5595d.appspot.com",
+        messagingSenderId: "456873223239",
+        appId: "1:456873223239:web:b5cd0870a3f2d3d0017d62",
+        measurementId: "G-W6BV1WJPP2"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase();
+      const auth = getAuth(app);
+      const dbref = ref(db);
+
+      let EmailInp = document.getElementById('emailInp');
+      let PassInp = document.getElementById('passwordInp');
+
+      let MainForm = document.getElementById('MainForm');
+      let SuccessMessage = document.getElementById('successMessage');
+      let ErrorMessage = document.getElementById('errorMessage');
+
+      let SignIn = evt => {
+        evt.preventDefault();
+
+        signInWithEmailAndPassword(auth, EmailInp.value, PassInp.value)
+          .then((credentials) => {
+            SuccessMessage.style.display = 'block';
+            ErrorMessage.style.display = 'none';
+            console.log(credentials);
+             // Redirect to dashboard.html
+          window.location.href = "dashboard.html";
+          })
+          .catch((error) => {
+            ErrorMessage.style.display = 'block';
+            SuccessMessage.style.display = 'none';
+            console.log(error.code);
+            console.log(error.message);
+          });
+      }
+
+      MainForm.addEventListener('submit', SignIn);
+    </script>
+  </body>
+  <!-- <script src="./js/main.js"></script> -->
+</html>
